@@ -57,7 +57,7 @@ For your first milestone, describe what your project is and how you plan to buil
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/CaCazFBhYKs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-For my starter project I chose the Arduino Starter Kit as it is teaches the basics of Java coding and circuitry. I used the Arduino to build a simple circuit, that with the press of a button can turn on and off 2 seprate LED lights. When the button is pressed the red LED turns on and the green LED turns off, and vice versa when the button is in the up position. 
+For my starter project I chose the Arduino Starter Kit as it is teaches the basics of Java coding and circuitry. I used the Arduino to build a simple circuit, that with the press of a button can turn on and off 2 seprate LED lights. When the button is pressed or read as HIGH the red LED is set to HIGH, or on, and the green LED is set to LOW, or turns off, and vice versa when the button is read as LOW, or in not being pressed. I created this circuit using an Arduino, a proto shield, a handful of hook up wires, 3 resistors, a button, and a bread board for testing. Most of my challenges came in my inexperience with an Arduino and its accessories. 
 
 # Schematics 
 Here's where you'll put images of your schematics. [Tinkercad](https://www.tinkercad.com/blog/official-guide-to-tinkercad-circuits) and [Fritzing](https://fritzing.org/learning/) are both great resoruces to create professional schematic diagrams, though BSE recommends Tinkercad becuase it can be done easily and for free in the browser. 
