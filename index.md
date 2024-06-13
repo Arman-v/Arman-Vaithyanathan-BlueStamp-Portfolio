@@ -7,7 +7,7 @@
 |:--:|:--:|:--:|:--:|
 | Arman V | Lynbrook High School | Mechanical Engineering | Incoming Sophmore
 
-![Headstone Image](Arman Small.jpeg)
+![Headstone Image](ArmanV.jpeg)
   
 # Final Milestone
 
