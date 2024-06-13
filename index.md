@@ -53,7 +53,7 @@ For your first milestone, describe what your project is and how you plan to buil
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/CaCazFBhYKs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-For my starter project I chose the Arduino Starter Kit as it is teaches the basics of Java coding and circuitry and could be the basis for many mechanical engineering projects I choose to pursue in the future. I used the Arduino to build a simple circuit, that with the press of a button can turn on and off 2 seprate LED lights. When the button is pressed or read as HIGH the red LED is set to LOW, or off, and the green LED is set to HIGH, or turns on, and vice versa when the button is read as LOW, or in not being pressed. I created this circuit using an Arduino, a proto shield, a handful of hook up wires, 3 resistors, a button, and a bread board for testing. 
+For my starter project I chose the Arduino Starter Kit as it is teaches the basics of Java coding and circuitry and could be the basis for many mechanical engineering projects I choose to pursue in the future. I used the Arduino to build a simple circuit, that with the press of a button can turn on and off 2 seprate LED lights. When the button is pressed or read as HIGH the blue LED is set to LOW, or off, and the green LED is set to HIGH, or turns on, and vice versa when the button is read as LOW, or is not being pressed. I created this circuit using an Arduino, a proto shield, a handful of hook up wires, 3 resistors, a button, and a bread board for testing. 
 
 ### Challenges
 
@@ -71,15 +71,45 @@ Here's where you'll put your code. The syntax below places it into a block of co
 
 ### Starter Project Code
 
-```c++
-void setup() {
-  // put your setup code here, to run once:
+```/*
+  Button
 
+  Turns on and off 2 LEDs connected to digital pin 13 and 12,
+  when pressing a pushbutton attached to pin 2.
+
+*/
+
+// constants won't change. They're used here to set pin numbers:
+const int buttonPin = 2;  // the number of the pushbutton pin
+const int led13 = 13;    // the number of LED pin
+const int led12 = 12; // the number of the LED pin 2
+// variables will change:
+int buttonState = 0;  // variable for reading the pushbutton status
+
+void setup() {
+  // initialize the LED pin as an output:
+  pinMode(led13, OUTPUT);
+  pinMode(led12, OUTPUT);
+  // initialize the pushbutton pin as an input:
+  pinMode(buttonPin, INPUT);
+  Serial.begin(9600);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  // read the state of the pushbutton value:
+  buttonState = digitalRead(buttonPin);
 
+  // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
+  if (buttonState == HIGH) {
+    // turn LED on:
+    digitalWrite(led13, LOW);
+    digitalWrite(led12, HIGH);
+    Serial.println("On");
+  } else {
+    // turn LED off:
+    digitalWrite(led13, HIGH);
+    digitalWrite(led12, LOW);
+  }
 }
 ```
 
