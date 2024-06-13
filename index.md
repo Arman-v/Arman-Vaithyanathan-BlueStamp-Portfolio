@@ -74,8 +74,7 @@ Here's where you'll put your code. The syntax below places it into a block of co
 ```c++
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
-  Serial.println("Hello World!");
+
 }
 
 void loop() {
