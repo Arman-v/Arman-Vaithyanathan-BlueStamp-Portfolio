@@ -60,7 +60,7 @@ Most of my challenges came from my inexperience with an Arduino and its accessor
 
 ### Takeaways
 
-My main takeaways from this project were in building circuits and C++ programming, two very important skills for future projects. I learned how to build and test cuircuits on an Arduino with hook up wires and a breadboard, solder components to a protoshield and troubleshoot programming and wiring issues. I also learned how intiate inputs and outputs in C++ basic if and else statements and while loops(both things I had learned before).
+My main takeaways from this project were in building circuits and C++ programming, two very important skills for future projects. I learned how to build and test cuircuits on an Arduino with hook up wires and a breadboard, solder components to a protoshield and troubleshoot programming and wiring issues. I also learned how intiate inputs and outputs in C++, basic if and else statements and while loops(both things I had learned before).
 
 <!---
 # Schematics 
