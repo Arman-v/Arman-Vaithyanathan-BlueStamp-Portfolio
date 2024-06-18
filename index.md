@@ -45,7 +45,15 @@ This project is a ball tracking robot which uses OpenCV, a python library for co
 
 
 ### Key Components and Progress
-For my starter Project I have chosen the Ball Tracking Robot as it is a challenging project which integrates two fields which I am very interested in: artificial intelligence and robotics. This robot is a simple chassis with two DC motors in the back and one castor wheel in the front
+For my starter Project I have chosen the Ball Tracking Robot as it is a challenging project which integrates two fields which I am very interested in: artificial intelligence and robotics. This robot is a simple chassis with two DC motors in the back and one castor wheel in the front and uses the python library OpenCV to track and follow a red ball. For my first milestone I have completed two things. First I setup the Raspberry Pi with my computer and displey its interface using the OBS software. I then connected the camera and was able to get it working so that its video is displayed. For the second part of this milestone I built and coded a working 3 wheeled chassis. For now the chassis moves forward, backward, and turns with keyboard input: buttons "w", "a", "s", and "d".
+
+### Challenges 
+
+Most of my challenges came on the software side of this milestone. My first roadblock came when I was imaging the micro SD card with the 64 bit OS. Due to my inexperience I fried the SD card and had to get a replacement setting me back a lot of time. I also had trouble setting up the PiCamera. It took me a lot of time to do the proper research and install the proper libraries and updates as well as learn the proper commands to get the camera to take pictures and display the video. My final obstacle came on the hardware side, and when everything was finished, the speed was a problem: the robot was driving way to fast. On the Raspberry Pi the digital pins only has two settings, LOW and HIGH and for the wheel this means on and off. Thus I had to learn how to use the Analog pin and code it as this can take a variety of values not just HIGH and LOW to change the speed at which the motor is spinning.
+
+### Next Steps
+
+Next, I have to use OpenCV and program the PiCamera to track the red ball by bounding it with a blue box. This is going to be extremely challenging and probably the most difficult part of the entire project. 
 
 # Arduino Starter Kit Project
 
