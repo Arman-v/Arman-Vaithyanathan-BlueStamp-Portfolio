@@ -1,7 +1,5 @@
 # Ball Tracking Robot
-<!---Replace this text with a brief description (2-3 sentences) of your project. This description should draw the reader in and make them interested in what you've built. You can include what the biggest challenges, takeaways, and triumphs from completing the project were. As you complete your portfolio, remember your audience is less familiar than you are with all that your project entails!-->
-
-<!---You should comment out all portions of your portfolio that you have not completed yet, as well as any instructions:-->
+This project is a ball tracking robot which uses OpenCV, a python library for computer vision to track and follow a red ball. This project uses many components including a Raspberry Pi, a PiCamera, 2 DC motors, a motor driver, a power bank, a simple chassis, and ultrasonic sensors. The robot will track the red ball using its PiCamera and find the most optimal path towards it. 
 
 | **Engineer** | **School** | **Area of Interest** | **Grade** |
 |:--:|:--:|:--:|:--:|
@@ -35,9 +33,7 @@
 - Previous challenges you faced that you overcame
 - What needs to be completed before your final milestone--> 
 
-<!---# First Milestone-->
-
-<!---**Don't forget to replace the text below with the embedding for your milestone video. Go to Youtube, click Share -> Embed, and copy and paste the code to replace what's below.**-->
+# First Milestone
 
 <!---<iframe width="560" height="315" src="https://www.youtube.com/embed/F7M7imOVGug" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>-->
 
@@ -46,6 +42,10 @@
 - Technical progress you've made so far
 - Challenges you're facing and solving in your future milestones
 - What your plan is to complete your project-->
+
+
+### Key Components and Progress
+For my starter Project I have chosen the Ball Tracking Robot as it is a challenging project which integrates two fields which I am very interested in: artificial intelligence and robotics. This robot is a simple chassis with two DC motors in the back and one castor wheel in the front
 
 # Arduino Starter Kit Project
 
