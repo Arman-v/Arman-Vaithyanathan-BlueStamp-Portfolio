@@ -24,7 +24,7 @@ This project is a ball tracking robot which uses OpenCV, a python library for co
 # Second Milestone
 
 
-<!---<iframe width="560" height="315" src="https://www.youtube.com/embed/F7M7imOVGug" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>-->
+<iframe width="560" height="315" src="https://www.youtube.com/embed/xUZzjAomygE?si=OKwYcNYPOeUimfoA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 For my second milestone of the Ball Tracking Robot, I used the python libraries OpenCV and picamera2 to track a red ball. How it works is the camera searches each frame and identifies the largest group of red pixels and bounds that object with a blue circle as long as that object meets a certain amount of pixels in length. What surprised me with this project so far is the lack of documentation of the picamera2 library, and especially since this is a newer library, it is much harder to learn about and code with then the older picameralibrary
 
