@@ -21,11 +21,22 @@ This project is a ball tracking robot which uses OpenCV, a python library for co
 
 
 
-<!---# Second Milestone-->
+# Second Milestone
 
-<!---**Don't forget to replace the text below with the embedding for your milestone video. Go to Youtube, click Share -> Embed, and copy and paste the code to replace what's below.**-->
 
 <!---<iframe width="560" height="315" src="https://www.youtube.com/embed/F7M7imOVGug" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>-->
+
+For my second milestone of the Ball Tracking Robot, I used the python libraries OpenCV and picamera2 to track a red ball. How it works is the camera searches each frame and identifies the largest group of red pixels and bounds that object with a blue circle as long as that object meets a certain amount of pixels in length. What surprised me with this project so far is the lack of documentation of the picamera2 library, and especially since this is a newer library, it is much harder to learn about and code with then the older picameralibrary
+
+### Challenges
+
+My main challenge came in the lack of documentation of the picamera2 library. This python library is an updated version of the outdated picamera library, and there is not a lot of information on the picamera2 library. A lot the open source code is in the picamera library, thus outsourcing was practically out of the picture, unless I was able to translte the picamera functions into picamera2. Another problem I faced later on was when showing the camera feed, the blue and red pixels were inverted. This problem arose when translating picamera to picamera2, as picamera uses rgb, or red, green blue as their order of colors when giving the color info, while picmera2 uses blue, green, red as their order. When I realized this I add to switch bgr to rgb so that the pixels where displayed correctly.
+
+### Next steps
+
+For the final milestone, I have to combine the software and hardware parts of my robot. Right now the hardware is moving with keyboards inputs independently from the ball tracking. For the final milestone I have code and wire the ultrasonic sensors and code the robot to move and follow the red ball using the opencv tracking. 
+
+
 
 <!---For your second milestone, explain what you've worked on since your previous milestone. You can highlight:
 - Technical details of what you've accomplished and how they contribute to the final goal
