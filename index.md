@@ -7,9 +7,7 @@ This project is a ball tracking robot which uses OpenCV, a python library for co
 
 ![Headstone Image](ArmanV.jpeg)
   
-<!---# Final Milestone-->
-
-<!---**Don't forget to replace the text below with the embedding for your milestone video. Go to Youtube, click Share -> Embed, and copy and paste the code to replace what's below.**-->
+# Final Milestone
 
 <!---<iframe width="560" height="315" src="https://www.youtube.com/embed/F7M7imOVGug" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>-->
 
@@ -19,7 +17,13 @@ This project is a ball tracking robot which uses OpenCV, a python library for co
 - A summary of key topics you learned about
 - What you hope to learn in the future after everything you've learned at BSE-->
 
+### Summary
+In my final milestone of this Ball Tracking robot, I combined the software and hardware aspects of the project. Before this milestone I had a moving robot with keyboard inputs, Ultrasonic sensors that could measure distance between it and an object, and finally I had coded 
+a picamera that could track the red ball. I had to integrate these 3 pieces of code so that the robot follows and tracks the red ball. There are two parts to the tracking part. One is the use of the picamera and its tracking of the red ball. I hold the coordinates of the center of the red ball and depending of the position of the center of the ball in the camera,  the robot will turn left, right, or move forward. To back up this data, I also use the ultrasonic sensors. If the distance from the right ultrasonic sensor to the ball is less than the distance to the left ultrasonic sensor then the robot will move left, and vice versa, yet if the ball is closest to the center ultrasonic sensor, or eqaul distance to the left and right sensors then the robot will drive straight. Finally I do obstalce detection. If the ball is not in the frame of the camera, but their is an obstacle in front of the robot, it uses the ultrasonic sensors like above to turn away or back up from the object. 
 
+### Challenges
+
+This finl milestone was the hardest so far
 
 # Second Milestone
 
