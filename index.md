@@ -9,13 +9,6 @@ This project is a ball tracking robot which uses OpenCV, a python library for co
   
 # Final Milestone
 
-<!---<iframe width="560" height="315" src="https://www.youtube.com/embed/F7M7imOVGug" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>-->
-
-<!---For your final milestone, explain the outcome of your project. Key details to include are:
-- What you've accomplished since your previous milestone
-- What your biggest challenges and triumphs were at BSE
-- A summary of key topics you learned about
-- What you hope to learn in the future after everything you've learned at BSE-->
 
 ### Summary
 In my final milestone of this Ball Tracking robot, I combined the software and hardware aspects of the project. Before this milestone I had a moving robot with keyboard inputs, Ultrasonic sensors that could measure distance between it and an object, and finally I had coded 
@@ -23,7 +16,15 @@ a picamera that could track the red ball. I had to integrate these 3 pieces of c
 
 ### Challenges
 
-This finl milestone was the hardest so far
+This final milestone was the hardest so far as it required integrating two pieces of working code, something which turned out to be much harder than expected. I had the ball tracking code and movement code separatly and this milesotne was all about putting them together. This was extremely hard, as each part of each code had to be organized and ordered differently and a lot of code had to be changed so that the programs would be compatible together. I also had to remove a lot of code and add new code so that the final program would finally work. Another problem I had was connecting my computer and raspberry pi wirelessly using VNC, which allows us to connect them over the same wifi. My raspberry pi kept timing out, and I had tried multiple different troubleshooting steps, until I found out that it was the school wifi stopping from connecting my pi and computer. 
+
+### Takeaways
+
+Although I have only been at BlueStamp Engineering for 3 weeks so far, I had learned a lot building my project. I have learned how to use a soldering iron and use that in conjunction with many other components like wires, resistors, motors, LEDs, and sensors to learn how to build and create a working circuit using energy laws such as Ohm's law. With the beginning of my project I learned how to set up a single board computer, namely the raspberry pi 4. The main topic I learned with my Ball Tracking Robot is coding computer vision with python libraries such as OpenCV and picamera2, and how tracking works by following a set up pixels in any given frame. I also learned how to spoof such tracking robots and their ultrasonic sensors to redirect them from the original target. I am excited to use all of these topics I have learned at BlueStamp Engineering to build and create many new projects and robots in my future as an engineer and to continue to explore many such oppurtunities. 
+
+### Next Steps
+
+Next for this project are modifications. The first modification I had in mind is using the picamera to measure distance between it and an object instead of just relying on the ultrasonic sensors. This is something many modern cars do to reinforce the data they get from their sensors so it is less likely that they are spoofed. The second modification I will be adding to my robot is to move all the components to a omniwheel chassis with four wheels. This will allow me to move sideaways instead of turning for better and more efficient movement. 
 
 # Second Milestone
 
