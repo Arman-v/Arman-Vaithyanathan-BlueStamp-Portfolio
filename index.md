@@ -138,7 +138,7 @@ void loop() {
 
 # Schematics
 
- <img src="schematic.jpeg" alt="Headstone Image" height=350>
+ <img src="schematic1.jpeg" alt="Headstone Image" height=600>
 
  
 # Bill of Materials
