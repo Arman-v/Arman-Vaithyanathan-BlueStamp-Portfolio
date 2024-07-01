@@ -9,6 +9,7 @@ This project is a ball tracking robot which uses OpenCV, a python library for co
   
 # Final Milestone
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/M_9ss_l-Xow?si=vxcebCMEeTglg11X" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ### Summary
 In my final milestone of this Ball Tracking robot, I combined the software and hardware aspects of the project. Before this milestone I had a moving robot with keyboard inputs, Ultrasonic sensors that could measure distance between it and an object, and finally I had coded 
@@ -135,7 +136,7 @@ void loop() {
   }
 }
 ```
-### Ball Tracking Code(Before Modification)
+### Ball Tracking Robot Code(Before Modification)
 ```
 import time
 import cv2
