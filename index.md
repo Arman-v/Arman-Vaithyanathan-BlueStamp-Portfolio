@@ -6,6 +6,26 @@ This project is a ball tracking robot which uses OpenCV, a python library for co
 | Arman V | Lynbrook High School | Mechanical Engineering | Incoming Sophmore
 
 ![Headstone Image](ArmanV.jpeg)
+# Modification
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/M_9ss_l-Xow?si=vxcebCMEeTglg11X" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+### Summary
+To enhance the performance of my robot I have added three main modifications. Two hardware and one software modification to help my robot trakc and follow the ball more effectively and efficiently.
+
+
+
+### Modification 1 - PCB
+As I was working on my robot, I realized that the circuit and wiring for the ultrasonic sensors were extremely messy and always getting stuck on the wheels, so I decided to design a PCB. A PCB or a printed circuit board is an electronic assembly which creates electrical connections between components using copper to replace a breadboard and a mess of wires. I used the software kicad to first design the schematic for my circuit and then transfer that over into a 3D model of the PCB with all the proper through holes connected. The biggest challenge with this modification was learning how to use all the new tools and capabilities to be able to build the schematic and PCB. The second part of the designing that I had trouble with was placing all the compenents in places where they can make their proper connections and still be in an accessible place to soulder the components in when I mount the PCB. This took a while as I tried many different designs until I finally decided on one. This modification was really helpful as it taught how to design a PCB, and in my future in STEM this skill will be really helpful to enhance and optimize and future projects.
+
+![Headstone Image](ArmanV.jpeg)
+### Takeaways
+
+Although I have only been at BlueStamp Engineering for 3 weeks so far, I had learned a lot building my project. I have learned how to use a soldering iron and use that in conjunction with many other components like wires, resistors, motors, LEDs, and sensors to learn how to build and create a working circuit using energy laws such as Ohm's law. With the beginning of my project I learned how to set up a single board computer, namely the raspberry pi 4. The main topic I learned with my Ball Tracking Robot is coding computer vision with python libraries such as OpenCV and picamera2, and how tracking works by following a set up pixels in any given frame. I also learned how to spoof such tracking robots and their ultrasonic sensors to redirect them from the original target. I am excited to use all of these topics I have learned at BlueStamp Engineering to build and create many new projects and robots in my future as an engineer and to continue to explore many such oppurtunities. 
+
+### Next Steps
+
+Next for this project are modifications. The first modification I had in mind is using the picamera to measure distance between it and an object instead of just relying on the ultrasonic sensors. This is something many modern cars do to reinforce the data they get from their sensors so it is less likely that they are spoofed. The second modification I will be adding to my robot is to move all the components to a omniwheel chassis with four wheels. This will allow me to move sideaways instead of turning for better and more efficient movement.
   
 # Final Milestone
 
