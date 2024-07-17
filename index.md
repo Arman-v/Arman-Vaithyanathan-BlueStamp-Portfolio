@@ -17,7 +17,7 @@ To enhance the performance of my robot I have added three main modifications. Tw
 ### Modification 1 - PCB
 As I was working on my robot, I realized that the circuit and wiring for the ultrasonic sensors were extremely messy and always getting stuck on the wheels, so I decided to design a PCB. A PCB or a printed circuit board is an electronic assembly which creates electrical connections between components using copper to replace a breadboard and a mess of wires. I used the software kicad to first design the schematic for my circuit and then transfer that over into a 3D model of the PCB with all the proper through holes connected. The biggest challenge with this modification was learning how to use all the new tools and capabilities to be able to build the schematic and PCB. The second part of the designing that I had trouble with was placing all the compenents in places where they can make their proper connections and still be in an accessible place to soulder the components in when I mount the PCB. This took a while as I tried many different designs until I finally decided on one. This modification was really helpful as it taught how to design a PCB, and in my future in STEM this skill will be really helpful to enhance and optimize and future projects.
 
- <img src="PCB.jpeg" alt="Headstone Image" height=600>
+ <img src="PCB.jpeg" alt="Headstone Image" height=400>
  
 ### Modification 2 - Distance with Picamera
 
@@ -25,7 +25,9 @@ As per a suggestion from my instructor and as looking closer and testing the dis
 
 ### Modification 3 - Mecanum Wheel Movement
 
-My Final and biggest Modification is the adding of mecanum wheels. These are wheels with smaller wheels coating the outside that allow for strafing or moving side to side and diagonally. This movement can be achieved If you placed the wheels in an x shape, while moving the diagonal motors in the same direction and the adjacent wheels in the opposite direction. I implemented this movement so that the tracking and following of the ball is more effecient and accurate then before. My biggest challenges with this modification were problems with the circuit. The motor drivers were pulling too much current from the microprocesser, the raspberry pi, and it crashing. To solve this I had to build a more effecient circuit by connecting the motor drivers directly instead of going through the pi. This modification was super helpful too me because learning how to use mecanum wheels properly can help with my robotics team  and the performance of any robots I chose to build in the future. 
+My Final and biggest Modification is the adding of mecanum wheels. These are wheels with smaller wheels coating the outside that allow for strafing or moving side to side and diagonally. This movement can be achieved If you placed the wheels in an x shape, while moving the diagonal motors in the same direction and the adjacent wheels in the opposite direction. I implemented this movement so that the tracking and following of the ball is more effecient and accurate then before. My biggest challenges with this modification were problems with the circuit. The motor drivers were pulling too much current from the microprocesser, the raspberry pi, and it crashing. To solve this I had to build a more effecient circuit by connecting the motor drivers directly instead of going through the pi. This modification was super helpful too me because learning how to use mecanum wheels properly can help with my robotics team  and the performance of any robots I chose to build in the future. Below is a diagram of the movement capabilities of a mecanum wheel robot.
+ <img src="OmniWheel1.jpeg" alt="Headstone Image" height=400>
+
 
   
 # Final Milestone
@@ -307,7 +309,7 @@ picamera.configure(picamera.create_preview_configuration(main={"size": (640, 480
 picamera.start()
  
 # Color and font settings for drawing
-colour = (0, 255, 0)  # Green color for the square
+color = (0, 255, 0)  # Green color for the square
 font = cv2.FONT_HERSHEY_SIMPLEX
 origin = (50, 50)
 scale = 1
@@ -315,7 +317,7 @@ thickness = 2
  
 def apply_timestamp(frame):
     timestamp = time.strftime("%Y-%m-%d %X")
-    cv2.putText(frame, timestamp, origin, font, scale, colour, thickness)
+    cv2.putText(frame, timestamp, origin, font, scale, color, thickness)
  
 def detect_red_ball(frame):
     # Convert frame to HSV color space
@@ -358,7 +360,7 @@ def detect_red_ball(frame):
             return frame, center, radius
     return frame, None, 0
  
-def segment_colour(frame):  # returns only the red colors in the frame
+def segment_color(frame):  # returns only the red colors in the frame
     hsv_roi = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
  
     mask_1 = cv2.inRange(hsv_roi, np.array([150, 140, 1]), np.array([190, 255, 255]))  # Experimentally set BGR values appropriate for desired color
@@ -453,7 +455,7 @@ try:
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         apply_timestamp(frame)
         frame, center, radius = detect_red_ball(frame)
-        mask = segment_colour(frame)
+        mask = segment_color(frame)
         distL = sonar(GPIO_TRIGGER1, GPIO_ECHO1)
         distC = sonar(GPIO_TRIGGER2, GPIO_ECHO2)
         distR = sonar(GPIO_TRIGGER3, GPIO_ECHO3)
@@ -511,8 +513,689 @@ finally:
  ```
 ### Ball Tracking code after 3 Modifications
 ```
+import time
+import cv2
+import numpy as np
+from picamera2 import Picamera2
+import RPi.GPIO as GPIO
+ 
+sensor_proximity = 15  # Middle sensor
+rerouting_proximity = 17.5  # Side sensors only
+ 
+lower_range = 30
+upper_range = 290
+ 
+GPIO.setmode(GPIO.BCM)
+ 
+GPIO_TRIGGER1 = 16   # LEFT ultrasonic sensor
+GPIO_ECHO1 = 20
+ 
+GPIO_TRIGGER2 = 19   # FRONT ultrasonic sensor
+GPIO_ECHO2 = 26
+ 
+GPIO_TRIGGER3 = 11   # RIGHT ultrasonic sensor
+GPIO_ECHO3 = 9
+ 
+motor1B = 5  # LEFT motor
+motor1E = 6
+ 
+motor2B = 23  # RIGHT motor
+motor2E = 22
+ 
+motor3B = 21
+motor3E = 12
+ 
+motor4B = 14
+motor4E = 15
+ 
+en_a = 25  # Analog pins to control speed
+en_b = 24
+en_c = 7
+en_d = 18
+ 
+# Known width of the red ball in centimeters (e.g., 5 cm)
+KNOWN_WIDTH = 14.5
+  # Example: 5 cm
+ 
+KNOWN_DISTANCE = 30
+ 
+KNOWN_RADIUS = 215
+ 
+focal_length = (KNOWN_RADIUS * KNOWN_DISTANCE) / KNOWN_WIDTH
+ 
+# Setup Ultrasonic sensors
+GPIO.setup(GPIO_TRIGGER1, GPIO.OUT)  # Trigger 1
+GPIO.setup(GPIO_ECHO1, GPIO.IN)  # Echo 1
+GPIO.setup(GPIO_TRIGGER2, GPIO.OUT)  # Trigger 2
+GPIO.setup(GPIO_ECHO2, GPIO.IN)  # Echo 2
+GPIO.setup(GPIO_TRIGGER3, GPIO.OUT)  # Trigger 3
+GPIO.setup(GPIO_ECHO3, GPIO.IN)  # Echo 3
+ 
+# Set Ultrasonic triggers (TRIG) to false (low):
+GPIO.output(GPIO_TRIGGER1, False)
+GPIO.output(GPIO_TRIGGER2, False)
+GPIO.output(GPIO_TRIGGER3, False)
+ 
+def sonar(GPIO_TRIGGER, GPIO_ECHO):
+    start = 0
+    stop = 0
+    GPIO.setup(GPIO_TRIGGER, GPIO.OUT)  # Trigger
+    GPIO.setup(GPIO_ECHO, GPIO.IN)      # Echo
+ 
+    GPIO.output(GPIO_TRIGGER, False)  # Set trigger to False (Low)
+    time.sleep(0.01)  # Allow module to settle
+ 
+    # Send 10us pulse to trigger
+    GPIO.output(GPIO_TRIGGER, True)
+    time.sleep(0.00001)
+    GPIO.output(GPIO_TRIGGER, False)
+ 
+    begin = time.time()
+    while GPIO.input(GPIO_ECHO) == 0 and time.time() < begin + 0.05:
+        start = time.time()
+ 
+    while GPIO.input(GPIO_ECHO) == 1 and time.time() < begin + 0.1:
+        stop = time.time()
+ 
+    elapsed = stop - start  # Calculate pulse length
+    distance = elapsed * 34300  # Distance pulse traveled in that time is time multiplied by the speed of sound (cm/s)
+    distance = distance / 2  # That was the distance there and back, so take half of the value
+ 
+    return distance  # Reset GPIO settings, return distance (in cm) appropriate to be used for robot movement
+ 
+def calculate_distance(real_width, focal_length, width_in_image):
+    return (real_width * focal_length) / width_in_image
+ 
+# Set all motors to outputs
+GPIO.setup(motor1B, GPIO.OUT)
+GPIO.setup(motor1E, GPIO.OUT)
+GPIO.setup(motor2B, GPIO.OUT)
+GPIO.setup(motor2E, GPIO.OUT)
+GPIO.setup(motor3B, GPIO.OUT)
+GPIO.setup(motor3E, GPIO.OUT)
+GPIO.setup(motor4B, GPIO.OUT)
+GPIO.setup(motor4E, GPIO.OUT)
+ 
+GPIO.setup(en_a, GPIO.OUT)
+GPIO.setup(en_b, GPIO.OUT)
+GPIO.setup(en_c, GPIO.OUT)
+GPIO.setup(en_d, GPIO.OUT)
+power_a = GPIO.PWM(en_a, 255)
+power_a.start(100)
+ 
+power_b = GPIO.PWM(en_b, 255)
+power_b.start(100)
+ 
+power_c = GPIO.PWM(en_c, 255)
+power_c.start(100)
+ 
+power_d = GPIO.PWM(en_d, 255)
+power_d.start(100)
+ 
+def forward():
+    global power_a, power_b, power_c, power_d
+ 
+    GPIO.output(motor1B, GPIO.HIGH)
+    GPIO.output(motor1E, GPIO.LOW)
+    GPIO.output(motor2B, GPIO.LOW)
+    GPIO.output(motor2E, GPIO.HIGH)
+    GPIO.output(motor3B, GPIO.HIGH)
+    GPIO.output(motor3E, GPIO.LOW)
+    GPIO.output(motor4B, GPIO.HIGH)
+    GPIO.output(motor4E, GPIO.LOW)
+ 
+ 
+def reverse():
+    GPIO.output(motor1B, GPIO.LOW)
+    GPIO.output(motor1E, GPIO.HIGH)
+    GPIO.output(motor2B, GPIO.HIGH)
+    GPIO.output(motor2E, GPIO.LOW)
+    GPIO.output(motor3B, GPIO.LOW)
+    GPIO.output(motor3E, GPIO.HIGH)
+    GPIO.output(motor4B, GPIO.LOW)
+    GPIO.output(motor4E, GPIO.HIGH)
+ 
+def leftturn():
+    GPIO.output(motor1B, GPIO.LOW)
+    GPIO.output(motor1E, GPIO.HIGH)
+    GPIO.output(motor2B, GPIO.LOW)
+    GPIO.output(motor2E, GPIO.HIGH)
+    GPIO.output(motor3B, GPIO.HIGH)
+    GPIO.output(motor3E, GPIO.LOW)
+    GPIO.output(motor4B, GPIO.LOW)
+    GPIO.output(motor4E, GPIO.HIGH)
+ 
+def rightturn():
+    GPIO.output(motor1B, GPIO.HIGH)
+    GPIO.output(motor1E, GPIO.LOW)
+    GPIO.output(motor2B, GPIO.HIGH)
+    GPIO.output(motor2E, GPIO.LOW)
+    GPIO.output(motor3B, GPIO.LOW)
+    GPIO.output(motor3E, GPIO.HIGH)
+    GPIO.output(motor4B, GPIO.HIGH)
+    GPIO.output(motor4E, GPIO.LOW)
+ 
+def stop():
+    GPIO.output(motor1B, GPIO.LOW)
+    GPIO.output(motor1E, GPIO.LOW)
+    GPIO.output(motor2B, GPIO.LOW)
+    GPIO.output(motor2E, GPIO.LOW)
+    GPIO.output(motor3B, GPIO.LOW)
+    GPIO.output(motor3E, GPIO.LOW)
+    GPIO.output(motor4B, GPIO.LOW)
+    GPIO.output(motor4E, GPIO.LOW)
+ 
+def frontright():
+    GPIO.output(motor1B, GPIO.HIGH)
+    GPIO.output(motor1E, GPIO.LOW)
+    GPIO.output(motor2B, GPIO.LOW)
+    GPIO.output(motor2E, GPIO.LOW)
+    GPIO.output(motor3B, GPIO.LOW)
+    GPIO.output(motor3E, GPIO.LOW)
+    GPIO.output(motor4B, GPIO.HIGH)
+    GPIO.output(motor4E, GPIO.LOW)
+def frontleft():
+    GPIO.output(motor1B, GPIO.LOW)
+    GPIO.output(motor1E, GPIO.LOW)
+    GPIO.output(motor2B, GPIO.LOW)
+    GPIO.output(motor2E, GPIO.HIGH)
+    GPIO.output(motor3B, GPIO.HIGH)
+    GPIO.output(motor3E, GPIO.LOW)
+    GPIO.output(motor4B, GPIO.LOW)
+    GPIO.output(motor4E, GPIO.LOW)
+ 
+def backleft():
+    GPIO.output(motor1B, GPIO.LOW)
+    GPIO.output(motor1E, GPIO.HIGH)
+    GPIO.output(motor2B, GPIO.LOW)
+    GPIO.output(motor2E, GPIO.LOW)
+    GPIO.output(motor3B, GPIO.LOW)
+    GPIO.output(motor3E, GPIO.LOW)
+    GPIO.output(motor4B, GPIO.LOW)
+    GPIO.output(motor4E, GPIO.HIGH)
+ 
+ 
+def backright():
+    GPIO.output(motor1B, GPIO.LOW)
+    GPIO.output(motor1E, GPIO.LOW)
+    GPIO.output(motor2B, GPIO.HIGH)
+    GPIO.output(motor2E, GPIO.LOW)
+    GPIO.output(motor3B, GPIO.LOW)
+    GPIO.output(motor3E, GPIO.HIGH)
+    GPIO.output(motor4B, GPIO.LOW)
+    GPIO.output(motor4E, GPIO.LOW)
+ 
+def pivotleft():
+    GPIO.output(motor1B, GPIO.HIGH)
+    GPIO.output(motor1E, GPIO.LOW)
+    GPIO.output(motor2B, GPIO.LOW)
+    GPIO.output(motor2E, GPIO.LOW)
+    GPIO.output(motor3B, GPIO.HIGH)
+    GPIO.output(motor3E, GPIO.LOW)
+    GPIO.output(motor4B, GPIO.LOW)
+    GPIO.output(motor4E, GPIO.LOW)
+ 
+def pivotright():
+    GPIO.output(motor1B, GPIO.LOW)
+    GPIO.output(motor1E, GPIO.LOW)
+    GPIO.output(motor2B, GPIO.LOW)
+    GPIO.output(motor2E, GPIO.HIGH)
+    GPIO.output(motor3B, GPIO.LOW)
+    GPIO.output(motor3E, GPIO.LOW)
+    GPIO.output(motor4B, GPIO.HIGH)
+    GPIO.output(motor4E, GPIO.LOW)
+ 
+# Initialize Picamera2
+picamera = Picamera2()
+picamera.configure(picamera.create_preview_configuration(main={"size": (640, 480)}))
+picamera.start()
+ 
+# Color and font settings for drawing
+color = (0, 255, 0)  # Green color for the square
+font = cv2.FONT_HERSHEY_SIMPLEX
+origin = (50, 50)
+scale = 1
+thickness = 2
+ 
+def apply_timestamp(frame):
+    timestamp = time.strftime("%Y-%m-%d %X")
+    cv2.putText(frame, timestamp, origin, font, scale, color, thickness)
+ 
+def detect_red_ball(frame):
+    # Convert frame to HSV color space
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+ 
+    # Define lower and upper bounds for red color detection in HSV
+    lower_red = np.array([150, 140, 1])
+    upper_red = np.array([190, 255, 255])
+ 
+    # Threshold the HSV image to get only red colors
+    mask1 = cv2.inRange(hsv, lower_red, upper_red)
+ 
+    mask = mask1
+ 
+    # Apply a series of erosions and dilations to reduce noise
+    mask = cv2.erode(mask, None, iterations=2)
+    mask = cv2.dilate(mask, None, iterations=2)
+ 
+    # Find contours in the mask
+    contours, _ = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+ 
+    # Initialize center of the ball as None
+    center = None
+ 
+    # Proceed if at least one contour was found
+    if len(contours) > 0:
+        # Find the largest contour (assuming it's the ball)
+        c = max(contours, key=cv2.contourArea)
+ 
+        # Compute the minimum enclosing circle and centroid
+        ((x, y), radius) = cv2.minEnclosingCircle(c)
+        M = cv2.moments(c)
+        center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+ 
+        # Only proceed if the radius meets a minimum size
+        if radius > 10:
+            # Draw the circle and centroid on the frame
+            cv2.circle(frame, (int(x), int(y)), int(radius), (255, 0, 0), 2)  # Red circle around the detected object
+            cv2.putText(frame, "Red Ball", (int(x - radius), int(y - radius)), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 0), 2)
+            # Calculate the distance to the red ball
+            distance = calculate_distance(KNOWN_WIDTH, focal_length, 2 * radius)
+ 
+            # Display the distance on the image
+            cv2.putText(frame, f"Distance: {distance:.2f} cm", (int(x - radius), int(y + radius + 20)), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+            return frame, center, radius
+    return frame, None, 0
+ 
+def segment_color(frame):  # returns only the red colors in the frame
+    hsv_roi = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+ 
+    mask_1 = cv2.inRange(hsv_roi, np.array([150, 140, 1]), np.array([190, 255, 255]))  # Experimentally set BGR values appropriate for desired color
+ 
+    mask = mask_1
+    kern_dilate = np.ones((8, 8), np.uint8)
+    kern_erode = np.ones((3, 3), np.uint8)
+    mask = cv2.erode(mask, kern_erode)  # Eroding
+    mask = cv2.dilate(mask, kern_dilate)  # Dilating
+ 
+    (h, w) = mask.shape
+ 
+    cv2.imshow('mask', mask)  # Shows mask (B&W screen with identified red pixels)
+ 
+    return mask
+ 
+def no_obstacle(distanceL, distanceC, distanceR):
+    if abs(distanceL) > sensor_proximity and abs(distanceC) > sensor_proximity and abs(distanceR) > sensor_proximity:
+        return True
+    return False
+ 
+def find_blob(blob):
+    contours, _ = cv2.findContours(blob.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    largest_contour = 0
+    cont_index = -1
+ 
+    for idx, contour in enumerate(contours):
+        area = cv2.contourArea(contour)
+        if (area > largest_contour):
+            largest_contour = area
+            cont_index = idx
+ 
+    r = (0, 0, 2, 2)
+ 
+    if len(contours) > 0:
+        r = cv2.boundingRect(contours[cont_index])  # Fitting rectangle to cover identified object
+ 
+    return r, largest_contour
+ 
+def reroute(frame, mask, distance):  # Avoids obstacles by changing direction (left / right)
+    (cy, cx) = mask.shape
+    r, area = find_blob(mask)
+    distL = sonar(GPIO_TRIGGER1, GPIO_ECHO1)
+    distC = sonar(GPIO_TRIGGER2, GPIO_ECHO2)
+    distR = sonar(GPIO_TRIGGER3, GPIO_ECHO3)
+    _, _, radius = detect_red_ball(frame)
+ 
+ 
+    if(area > 15):  # If a red object exists
+        if no_obstacle(distL, distance, distR):
+            if(r[0] > upper_range): 
+                if distance >= 50: # Turn right if red object is closer to the right
+                    print('FRONTRIGHT')
+                    frontright()
+                elif distance < 50:
+                    print("RIGHT")
+                    rightturn()
+                    time.sleep(0.2)
+ 
+ 
+ 
+            elif(r[0] < lower_range):  # Turn left if red object is closer to the left
+                if distance >= 50: # Turn right if red object is closer to the right
+                    print('FRONTLEFT')
+                    frontleft()
+                elif distance < 50:
+                    print("LEFT")
+                    leftturn()
+                    time.sleep(0.2)
+ 
+ 
+            else:
+                if distance >= 30:
+                    print("FORWARD")
+                    forward()
+               # If the red object is in the center
+                if distance < 30:
+                    print('FORWARD')
+                    forward()
+ 
+ 
+ 
+        if not no_obstacle(distL, distance, distR):
+            if ((distC < sensor_proximity)): # PARKED STATE: If the ball is in front of the center sensor
+                stop()
+                print("Ball Found")
+ 
+            elif(distL < rerouting_proximity):
+                print("Rerouting right")
+                leftturn()
+                time.sleep(0.15)
+                stop()
+ 
+            elif(distR < rerouting_proximity):
+                print("rerouting left")
+                rightturn()
+                time.sleep(0.15)
+                stop()
+ 
+ 
+    else:
+        stop()
+        time.sleep(0.1)
+ 
+ 
+searching = "left"
+try:
+    while True:
+        frame = picamera.capture_array()
+                # Convert BGR to RGB
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        apply_timestamp(frame)
+        frame, center, radius = detect_red_ball(frame)
+        mask = segment_color(frame)
+        distL = sonar(GPIO_TRIGGER1, GPIO_ECHO1)
+        distC = sonar(GPIO_TRIGGER2, GPIO_ECHO2)
+        distR = sonar(GPIO_TRIGGER3, GPIO_ECHO3)
+ 
+ 
+        # Display intermediate results for debugging
+        cv2.imshow("Frame", frame)
+        cv2.imshow("Mask", mask)
+ 
+        if center is not None:
+            distance = calculate_distance(KNOWN_WIDTH, focal_length, 2 * radius)
+            print(f"Ball distance from robot: {distance}")
+            reroute(frame, mask, distance)
+ 
+        else:
+            if abs(distL) < rerouting_proximity and abs(distR) > rerouting_proximity:
+                print('Obstacle detected! Rerouting... SHARP RIGHT')
+ 
+                backright()
+                searching = "right"
+                time.sleep(0.15)
+ 
+            elif abs(distR) < rerouting_proximity and abs(distL) > rerouting_proximity:
+                print('Obstacle detected! Rerouting... SHARP LEFT')
+ 
+                backleft()
+                searching = "left"
+                time.sleep(0.15)
+            elif abs(distC) < sensor_proximity:
+                print('Obstacle detected! Rerouting... REVERSE')
+                reverse()
+                time.sleep(0.15)
+            else:
+                if searching == "left":
+                    pivotleft()
+ 
+                    print("Searching for ball...left")
+                if searching == "right":
+                    pivotleft()
+                    print("Searching for ball...right")
+                else:
+                    pivotleft()
+                time.sleep(0.15)
+                stop()
+ 
+ 
+ 
+ 
+ 
+        # Breaking out of the loop
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+            break
+ 
+ 
+finally:
+    stop()
+    GPIO.cleanup()
+    cv2.destroyAllWindows()
+    picamera.stop()
 
+```
 
+### Drive Test Code for Mecanum Wheels with Keyboard Inputs
+```
+import RPi.GPIO as GPIO
+import time
+ 
+GPIO.setmode(GPIO.BCM)
+ 
+motor1B = 5  # LEFT motor
+motor1E = 6
+ 
+motor2B = 22  # RIGHT motor
+motor2E = 23
+ 
+motor3B = 21
+motor3E = 12
+ 
+motor4B = 14
+motor4E = 15
+ 
+ 
+ 
+ 
+en_a = 25  # Analog pins to control speed
+en_b = 24
+en_c = 7
+en_d = 18
+ 
+ 
+GPIO.setup(en_a, GPIO.OUT)
+GPIO.setup(en_b, GPIO.OUT)
+GPIO.setup(en_c, GPIO.OUT)
+GPIO.setup(en_d, GPIO.OUT)
+power_a = GPIO.PWM(en_a, 255)
+power_a.start(100)
+ 
+power_b = GPIO.PWM(en_b, 255)
+power_b.start(100)
+ 
+power_c = GPIO.PWM(en_c, 255)
+power_c.start(100)
+ 
+power_d = GPIO.PWM(en_d, 255)
+power_d.start(100)
+ 
+# Set all motors to outputs
+GPIO.setup(motor1B, GPIO.OUT)
+GPIO.setup(motor1E, GPIO.OUT)
+GPIO.setup(motor2B, GPIO.OUT)
+GPIO.setup(motor2E, GPIO.OUT)
+GPIO.setup(motor3B, GPIO.OUT)
+GPIO.setup(motor3E, GPIO.OUT)
+GPIO.setup(motor4B, GPIO.OUT)
+GPIO.setup(motor4E, GPIO.OUT)
+ 
+def forward():
+    GPIO.output(motor1B, GPIO.HIGH)
+    GPIO.output(motor1E, GPIO.LOW)
+    GPIO.output(motor2B, GPIO.HIGH)
+    GPIO.output(motor2E, GPIO.LOW)
+    GPIO.output(motor3B, GPIO.HIGH)
+    GPIO.output(motor3E, GPIO.LOW)
+    GPIO.output(motor4B, GPIO.HIGH)
+    GPIO.output(motor4E, GPIO.LOW)
+ 
+ 
+def reverse():
+    global power_a, power_b, power_c, power_d
+    GPIO.output(motor1B, GPIO.LOW)
+    GPIO.output(motor1E, GPIO.HIGH)
+    GPIO.output(motor2B, GPIO.LOW)
+    GPIO.output(motor2E, GPIO.HIGH)
+    GPIO.output(motor3B, GPIO.LOW)
+    GPIO.output(motor3E, GPIO.HIGH)
+    GPIO.output(motor4B, GPIO.LOW)
+    GPIO.output(motor4E, GPIO.HIGH)
+ 
+def leftturn():
+    global power_a, power_b, power_c, power_d
+    GPIO.output(motor1B, GPIO.LOW)
+    GPIO.output(motor1E, GPIO.HIGH)
+    GPIO.output(motor2B, GPIO.HIGH)
+    GPIO.output(motor2E, GPIO.LOW)
+    GPIO.output(motor3B, GPIO.HIGH)
+    GPIO.output(motor3E, GPIO.LOW)
+    GPIO.output(motor4B, GPIO.LOW)
+    GPIO.output(motor4E, GPIO.HIGH)
+ 
+ 
+def rightturn():
+    global power_a, power_b, power_c, power_d
+    GPIO.output(motor1B, GPIO.HIGH)
+    GPIO.output(motor1E, GPIO.LOW)
+    GPIO.output(motor2B, GPIO.LOW)
+    GPIO.output(motor2E, GPIO.HIGH)
+    GPIO.output(motor3B, GPIO.LOW)
+    GPIO.output(motor3E, GPIO.HIGH)
+    GPIO.output(motor4B, GPIO.HIGH)
+    GPIO.output(motor4E, GPIO.LOW)
+ 
+def stop():
+    GPIO.output(motor1B, GPIO.LOW)
+    GPIO.output(motor1E, GPIO.LOW)
+    GPIO.output(motor2B, GPIO.LOW)
+    GPIO.output(motor2E, GPIO.LOW)
+    GPIO.output(motor3B, GPIO.LOW)
+    GPIO.output(motor3E, GPIO.LOW)
+    GPIO.output(motor4B, GPIO.LOW)
+    GPIO.output(motor4E, GPIO.LOW)
+ 
+def frontright():
+    GPIO.output(motor1B, GPIO.HIGH)
+    GPIO.output(motor1E, GPIO.LOW)
+    GPIO.output(motor2B, GPIO.LOW)
+    GPIO.output(motor2E, GPIO.LOW)
+    GPIO.output(motor3B, GPIO.LOW)
+    GPIO.output(motor3E, GPIO.LOW)
+    GPIO.output(motor4B, GPIO.HIGH)
+    GPIO.output(motor4E, GPIO.LOW)
+def frontleft():
+    GPIO.output(motor1B, GPIO.LOW)
+    GPIO.output(motor1E, GPIO.LOW)
+    GPIO.output(motor2B, GPIO.HIGH)
+    GPIO.output(motor2E, GPIO.LOW)
+    GPIO.output(motor3B, GPIO.HIGH)
+    GPIO.output(motor3E, GPIO.LOW)
+    GPIO.output(motor4B, GPIO.LOW)
+    GPIO.output(motor4E, GPIO.LOW)
+def backleft():
+    GPIO.output(motor1B, GPIO.LOW)
+    GPIO.output(motor1E, GPIO.HIGH)
+    GPIO.output(motor2B, GPIO.LOW)
+    GPIO.output(motor2E, GPIO.LOW)
+    GPIO.output(motor3B, GPIO.LOW)
+    GPIO.output(motor3E, GPIO.LOW)
+    GPIO.output(motor4B, GPIO.LOW)
+    GPIO.output(motor4E, GPIO.HIGH)
+ 
+ 
+def backright():
+    GPIO.output(motor1B, GPIO.LOW)
+    GPIO.output(motor1E, GPIO.LOW)
+    GPIO.output(motor2B, GPIO.LOW)
+    GPIO.output(motor2E, GPIO.HIGH)
+    GPIO.output(motor3B, GPIO.LOW)
+    GPIO.output(motor3E, GPIO.HIGH)
+    GPIO.output(motor4B, GPIO.LOW)
+    GPIO.output(motor4E, GPIO.LOW)
+ 
+def pivotleft():
+    GPIO.output(motor1B, GPIO.HIGH)
+    GPIO.output(motor1E, GPIO.LOW)
+    GPIO.output(motor2B, GPIO.LOW)
+    GPIO.output(motor2E, GPIO.LOW)
+    GPIO.output(motor3B, GPIO.HIGH)
+    GPIO.output(motor3E, GPIO.LOW)
+    GPIO.output(motor4B, GPIO.LOW)
+    GPIO.output(motor4E, GPIO.LOW)
+ 
+def pivotright():
+    GPIO.output(motor1B, GPIO.LOW)
+    GPIO.output(motor1E, GPIO.LOW)
+    GPIO.output(motor2B, GPIO.HIGH)
+    GPIO.output(motor2E, GPIO.LOW)
+    GPIO.output(motor3B, GPIO.LOW)
+    GPIO.output(motor3E, GPIO.LOW)
+    GPIO.output(motor4B, GPIO.HIGH)
+    GPIO.output(motor4E, GPIO.LOW)
+ 
+ 
+ 
+ 
+ 
+try:
+    while True:
+        user_input = input()
+        if user_input == "w":
+ 
+                forward()
+        if user_input == "s":
+ 
+                reverse()
+        if user_input == "a":
+                leftturn()
+        if user_input == "d":
+                rightturn()
+        if user_input == "x":
+                stop()
+        if user_input == "e":
+ 
+                frontright()
+        if user_input == "q":
+ 
+                frontleft()
+        if user_input == "c":
+ 
+                backright()
+        if user_input == "z":
+ 
+                backleft()
+ 
+        if user_input == "l":
+ 
+                pivotleft()
+        if user_input == "k":
+ 
+                pivotright()
+ 
+ 
+ 
+finally:
+    stop()
+    GPIO.cleanup()
 ```
 # Schematics
 
@@ -537,14 +1220,5 @@ finally:
 | Wireless Mouse and Keyboard          | Used to operate Rasp pi                         | $19.98 | [Link](https://www.amazon.com/Wireless-Keyboard-Trueque-Cordless-Computer/dp/B09J4RQFK7/ref=sr_1_1_sspa?crid=2R048HRMFBA7Z&keywords=mouse+and+keyboard+wireless&qid=1689871090&sprefix=mouse+and+keyboard+wireless+%2Caps%2C131&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1)   |
 | Power Bank          | Powers Raspberry pi                      | $17.99 | [Link](https://www.amazon.com/INIU-High-Speed-Flashlight-Powerbank-Compatible/dp/B07CZDXDG8/ref=sr_1_1_sspa?dib=eyJ2IjoiMSJ9.QKGsYnUA7w9IYsHtGbbDBim8z7uZVfF7g9BxoPE-iQL2H8Vh7k9LdTbNSUe-U-HZ23d6LBt9cd15jHV7ug_glOj9Q0Csy1MV6KFQUkSD6DNyLr2kQmLpvb2Yl2d9s6iJmJmIBv4kGDJ88-JlD9-ChcFEF1KxqxBWqkiVlVMwIqZwLrsiDiH0w1Lx5EuOw_UAafsA7faqnLZcpNdPXRXeRf7b0r4WxVFfL83DxW2vmPE.pi42qd88rlg3XjDUIXqd3zAXIcZNfvzKSxm7DxQOKFo&dib_tag=se&hvadid=664694094887&hvdev=c&hvlocphy=9061268&hvnetw=g&hvqmt=e&hvrand=1574656758975750498&hvtargid=kwd-1404864799632&hydadcr=22004_13484922&keywords=iniu%2Bpower%2Bbank%2Bportable%2Bcharger&qid=1719854906&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&th=1)   |
 | Breadboard          | Connect wires and ultrasonic sensors                      | 6 pcs - $8.99 | [Link](https://www.amazon.com/INIU-High-Speed-Flashlight-Powerbank-Compatible/dp/B07CZDXDG8/ref=sr_1_1_sspa?dib=eyJ2IjoiMSJ9.QKGsYnUA7w9IYsHtGbbDBim8z7uZVfF7g9BxoPE-iQL2H8Vh7k9LdTbNSUe-U-HZ23d6LBt9cd15jHV7ug_glOj9Q0Csy1MV6KFQUkSD6DNyLr2kQmLpvb2Yl2d9s6iJmJmIBv4kGDJ88-JlD9-ChcFEF1KxqxBWqkiVlVMwIqZwLrsiDiH0w1Lx5EuOw_UAafsA7faqnLZcpNdPXRXeRf7b0r4WxVFfL83DxW2vmPE.pi42qd88rlg3XjDUIXqd3zAXIcZNfvzKSxm7DxQOKFo&dib_tag=se&hvadid=664694094887&hvdev=c&hvlocphy=9061268&hvnetw=g&hvqmt=e&hvrand=1574656758975750498&hvtargid=kwd-1404864799632&hydadcr=22004_13484922&keywords=iniu%2Bpower%2Bbank%2Bportable%2Bcharger&qid=1719854906&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&th=1)   |
-| PCB(Print Circuit Board)         | Replace the wires and breadboard for a cleaner circuit | 6 pcs - $8.99 | [Link](https://www.amazon.com/INIU-High-Speed-Flashlight-Powerbank-Compatible/dp/B07CZDXDG8/ref=sr_1_1_sspa?dib=eyJ2IjoiMSJ9.QKGsYnUA7w9IYsHtGbbDBim8z7uZVfF7g9BxoPE-iQL2H8Vh7k9LdTbNSUe-U-HZ23d6LBt9cd15jHV7ug_glOj9Q0Csy1MV6KFQUkSD6DNyLr2kQmLpvb2Yl2d9s6iJmJmIBv4kGDJ88-JlD9-ChcFEF1KxqxBWqkiVlVMwIqZwLrsiDiH0w1Lx5EuOw_UAafsA7faqnLZcpNdPXRXeRf7b0r4WxVFfL83DxW2vmPE.pi42qd88rlg3XjDUIXqd3zAXIcZNfvzKSxm7DxQOKFo&dib_tag=se&hvadid=664694094887&hvdev=c&hvlocphy=9061268&hvnetw=g&hvqmt=e&hvrand=1574656758975750498&hvtargid=kwd-1404864799632&hydadcr=22004_13484922&keywords=iniu%2Bpower%2Bbank%2Bportable%2Bcharger&qid=1719854906&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&th=1)   |
+| PCB(Print Circuit Board)         | Replace the wires and breadboard for a cleaner circuit | 6 pcs - $8.99 | [Link]((https://jlcpcb.com/?from=VGBNA&utm_source=google&utm_medium=cpc&utm_campaign=13059631621&utm_content=581194145188&utm_term=b_jlcpcb&adgroupid=118955305341&utm_network=g_&gad_source=1&gclid=CjwKCAjw1920BhA3EiwAJT3lSRlSMqOQwBFHpiZdGU5G4nUApwWvX9u-6b274D_bB9IIbCiiIC48iRoC3ocQAvD_BwE))   |
 
-
-<!--
-# Other Resources/Examples
-One of the best parts about Github is that you can view how other people set up their own work. Here are some past BSE portfolios that are awesome examples. You can view how they set up their portfolio, and you can view their index.md files to understand how they implemented different portfolio components.
-- [Example 1](https://trashytuber.github.io/YimingJiaBlueStamp/)
-- [Example 2](https://sviatil0.github.io/Sviatoslav_BSE/)
-- [Example 3](https://arneshkumar.github.io/arneshbluestamp/)
-
-To watch the BSE tutorial on how to create a portfolio, click here.-->
