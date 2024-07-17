@@ -5,7 +5,7 @@ This project is a ball tracking robot which uses OpenCV, a python library for co
 |:--:|:--:|:--:|:--:|
 | Arman V | Lynbrook High School | Mechanical Engineering | Incoming Sophmore
 
-![Headstone Image](ArmanV.jpeg)
+![Headstone Image](Arman_V.jpeg)
 # Modification
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/99KV1ccMx6s?si=g1k0cdHY3nWoqi-c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
