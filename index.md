@@ -8,8 +8,7 @@ This project is a ball tracking robot which uses OpenCV, a python library for co
 ![Headstone Image](ArmanV.jpeg)
 # Modification
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/M_9ss_l-Xow?si=vxcebCMEeTglg11X" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/99KV1ccMx6s?si=g1k0cdHY3nWoqi-c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 ### Summary
 To enhance the performance of my robot I have added three main modifications. Two hardware and one software modification to help my robot trakc and follow the ball more effectively and efficiently.
 
@@ -18,14 +17,16 @@ To enhance the performance of my robot I have added three main modifications. Tw
 ### Modification 1 - PCB
 As I was working on my robot, I realized that the circuit and wiring for the ultrasonic sensors were extremely messy and always getting stuck on the wheels, so I decided to design a PCB. A PCB or a printed circuit board is an electronic assembly which creates electrical connections between components using copper to replace a breadboard and a mess of wires. I used the software kicad to first design the schematic for my circuit and then transfer that over into a 3D model of the PCB with all the proper through holes connected. The biggest challenge with this modification was learning how to use all the new tools and capabilities to be able to build the schematic and PCB. The second part of the designing that I had trouble with was placing all the compenents in places where they can make their proper connections and still be in an accessible place to soulder the components in when I mount the PCB. This took a while as I tried many different designs until I finally decided on one. This modification was really helpful as it taught how to design a PCB, and in my future in STEM this skill will be really helpful to enhance and optimize and future projects.
 
-![Headstone Image](ArmanV.jpeg)
-### Takeaways
+ <img src="PCB.jpeg" alt="Headstone Image" height=600>
+ 
+### Modification 2 - Distance with Picamera
 
-Although I have only been at BlueStamp Engineering for 3 weeks so far, I had learned a lot building my project. I have learned how to use a soldering iron and use that in conjunction with many other components like wires, resistors, motors, LEDs, and sensors to learn how to build and create a working circuit using energy laws such as Ohm's law. With the beginning of my project I learned how to set up a single board computer, namely the raspberry pi 4. The main topic I learned with my Ball Tracking Robot is coding computer vision with python libraries such as OpenCV and picamera2, and how tracking works by following a set up pixels in any given frame. I also learned how to spoof such tracking robots and their ultrasonic sensors to redirect them from the original target. I am excited to use all of these topics I have learned at BlueStamp Engineering to build and create many new projects and robots in my future as an engineer and to continue to explore many such oppurtunities. 
+As per a suggestion from my instructor and as looking closer and testing the distance measurement with the ultrasonic sensors, I realized they are extremely finicky and often be up to 20 cm off the correct distance. With this information I decided that ultrasonic sensors will not be sufficient and accurate enough for its suggested use.To fix this, and after doing some research I decided to use the picamera to measure distance to the red ball. This use of the camera to measure is distance is something which a lot of modern day autonomous cars do. The most common way to tackle measuring distance with a camera is to use similar triangles. Inside a camera there are two important parts which the traingles are drawn between. First is the focal point or the point on the camera lense where the light converges. The other is the image sensor in the camera which the frame that the camera lens takes is projected on. One triangle is drawn between the object on the image sensor and the focal point while the second triangle is drawn between the focal point and the object in real life. Because as the object being tracked moves in real life also moves on the image sensor the triangles are similar and you can use ratios between the sides to derive the distane to the object in real life. My main challenge in this modification was learning and understanding the actual formula and how it works so that I could integrate it with my code. Learning this formula and understanding how distance measurment can be extremely useful for any upcoming projects that I do. 
 
-### Next Steps
+### Modification 3 - Mecanum Wheel Movement
 
-Next for this project are modifications. The first modification I had in mind is using the picamera to measure distance between it and an object instead of just relying on the ultrasonic sensors. This is something many modern cars do to reinforce the data they get from their sensors so it is less likely that they are spoofed. The second modification I will be adding to my robot is to move all the components to a omniwheel chassis with four wheels. This will allow me to move sideaways instead of turning for better and more efficient movement.
+My Final and biggest Modification is the adding of mecanum wheels. These are wheels with smaller wheels coating the outside that allow for strafing or moving side to side and diagonally. This movement can be achieved If you placed the wheels in an x shape, while moving the diagonal motors in the same direction and the adjacent wheels in the opposite direction. I implemented this movement so that the tracking and following of the ball is more effecient and accurate then before. My biggest challenges with this modification were problems with the circuit. The motor drivers were pulling too much current from the microprocesser, the raspberry pi, and it crashing. To solve this I had to build a more effecient circuit by connecting the motor drivers directly instead of going through the pi. This modification was super helpful too me because learning how to use mecanum wheels properly can help with my robotics team  and the performance of any robots I chose to build in the future. 
+
   
 # Final Milestone
 
@@ -41,7 +42,7 @@ This final milestone was the hardest so far as it required integrating two piece
 
 ### Takeaways
 
-Although I have only been at BlueStamp Engineering for 3 weeks so far, I had learned a lot building my project. I have learned how to use a soldering iron and use that in conjunction with many other components like wires, resistors, motors, LEDs, and sensors to learn how to build and create a working circuit using energy laws such as Ohm's law. With the beginning of my project I learned how to set up a single board computer, namely the raspberry pi 4. The main topic I learned with my Ball Tracking Robot is coding computer vision with python libraries such as OpenCV and picamera2, and how tracking works by following a set up pixels in any given frame. I also learned how to spoof such tracking robots and their ultrasonic sensors to redirect them from the original target. I am excited to use all of these topics I have learned at BlueStamp Engineering to build and create many new projects and robots in my future as an engineer and to continue to explore many such oppurtunities. 
+Although I have only been at BlueStamp Engineering for 3 weeks so far, I have learned a lot building my project. I have learned how to use a soldering iron and use that in conjunction with many other components like wires, resistors, motors, LEDs, and sensors to learn how to build and create a working circuit using energy laws such as Ohm's law. With the beginning of my project I learned how to set up a single board computer, namely the raspberry pi 4. The main topic I learned with my Ball Tracking Robot is coding computer vision with python libraries such as OpenCV and picamera2, and how tracking works by following a set up pixels in any given frame. I also learned how to spoof such tracking robots and their ultrasonic sensors to redirect them from the original target. I am excited to use all of these topics I have learned at BlueStamp Engineering to build and create many new projects and robots in my future as an engineer and to continue to explore many such oppurtunities. 
 
 ### Next Steps
 
@@ -508,7 +509,11 @@ finally:
     cv2.destroyAllWindows()
     picamera.stop()
  ```
+### Ball Tracking code after 3 Modifications
+```
 
+
+```
 # Schematics
 
  <img src="schematic1.jpeg" alt="Headstone Image" height=600>
@@ -532,6 +537,8 @@ finally:
 | Wireless Mouse and Keyboard          | Used to operate Rasp pi                         | $19.98 | [Link](https://www.amazon.com/Wireless-Keyboard-Trueque-Cordless-Computer/dp/B09J4RQFK7/ref=sr_1_1_sspa?crid=2R048HRMFBA7Z&keywords=mouse+and+keyboard+wireless&qid=1689871090&sprefix=mouse+and+keyboard+wireless+%2Caps%2C131&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1)   |
 | Power Bank          | Powers Raspberry pi                      | $17.99 | [Link](https://www.amazon.com/INIU-High-Speed-Flashlight-Powerbank-Compatible/dp/B07CZDXDG8/ref=sr_1_1_sspa?dib=eyJ2IjoiMSJ9.QKGsYnUA7w9IYsHtGbbDBim8z7uZVfF7g9BxoPE-iQL2H8Vh7k9LdTbNSUe-U-HZ23d6LBt9cd15jHV7ug_glOj9Q0Csy1MV6KFQUkSD6DNyLr2kQmLpvb2Yl2d9s6iJmJmIBv4kGDJ88-JlD9-ChcFEF1KxqxBWqkiVlVMwIqZwLrsiDiH0w1Lx5EuOw_UAafsA7faqnLZcpNdPXRXeRf7b0r4WxVFfL83DxW2vmPE.pi42qd88rlg3XjDUIXqd3zAXIcZNfvzKSxm7DxQOKFo&dib_tag=se&hvadid=664694094887&hvdev=c&hvlocphy=9061268&hvnetw=g&hvqmt=e&hvrand=1574656758975750498&hvtargid=kwd-1404864799632&hydadcr=22004_13484922&keywords=iniu%2Bpower%2Bbank%2Bportable%2Bcharger&qid=1719854906&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&th=1)   |
 | Breadboard          | Connect wires and ultrasonic sensors                      | 6 pcs - $8.99 | [Link](https://www.amazon.com/INIU-High-Speed-Flashlight-Powerbank-Compatible/dp/B07CZDXDG8/ref=sr_1_1_sspa?dib=eyJ2IjoiMSJ9.QKGsYnUA7w9IYsHtGbbDBim8z7uZVfF7g9BxoPE-iQL2H8Vh7k9LdTbNSUe-U-HZ23d6LBt9cd15jHV7ug_glOj9Q0Csy1MV6KFQUkSD6DNyLr2kQmLpvb2Yl2d9s6iJmJmIBv4kGDJ88-JlD9-ChcFEF1KxqxBWqkiVlVMwIqZwLrsiDiH0w1Lx5EuOw_UAafsA7faqnLZcpNdPXRXeRf7b0r4WxVFfL83DxW2vmPE.pi42qd88rlg3XjDUIXqd3zAXIcZNfvzKSxm7DxQOKFo&dib_tag=se&hvadid=664694094887&hvdev=c&hvlocphy=9061268&hvnetw=g&hvqmt=e&hvrand=1574656758975750498&hvtargid=kwd-1404864799632&hydadcr=22004_13484922&keywords=iniu%2Bpower%2Bbank%2Bportable%2Bcharger&qid=1719854906&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&th=1)   |
+| PCB(Print Circuit Board)         | Replace the wires and breadboard for a cleaner circuit | 6 pcs - $8.99 | [Link](https://www.amazon.com/INIU-High-Speed-Flashlight-Powerbank-Compatible/dp/B07CZDXDG8/ref=sr_1_1_sspa?dib=eyJ2IjoiMSJ9.QKGsYnUA7w9IYsHtGbbDBim8z7uZVfF7g9BxoPE-iQL2H8Vh7k9LdTbNSUe-U-HZ23d6LBt9cd15jHV7ug_glOj9Q0Csy1MV6KFQUkSD6DNyLr2kQmLpvb2Yl2d9s6iJmJmIBv4kGDJ88-JlD9-ChcFEF1KxqxBWqkiVlVMwIqZwLrsiDiH0w1Lx5EuOw_UAafsA7faqnLZcpNdPXRXeRf7b0r4WxVFfL83DxW2vmPE.pi42qd88rlg3XjDUIXqd3zAXIcZNfvzKSxm7DxQOKFo&dib_tag=se&hvadid=664694094887&hvdev=c&hvlocphy=9061268&hvnetw=g&hvqmt=e&hvrand=1574656758975750498&hvtargid=kwd-1404864799632&hydadcr=22004_13484922&keywords=iniu%2Bpower%2Bbank%2Bportable%2Bcharger&qid=1719854906&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&th=1)   |
+
 
 <!--
 # Other Resources/Examples
