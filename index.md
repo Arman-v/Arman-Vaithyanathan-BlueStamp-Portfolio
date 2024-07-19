@@ -10,7 +10,7 @@ This project is a ball tracking robot which uses OpenCV, a python library for co
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/99KV1ccMx6s?si=g1k0cdHY3nWoqi-c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 ### Summary
-To enhance the performance of my robot I have added three main modifications. Two hardware and one software modification to help my robot trakc and follow the ball more effectively and efficiently.
+To enhance the performance of my robot I have added three main modifications. Two hardware and one software modification to help my robot track and follow the ball more effectively and efficiently.
 
 
 
